@@ -21,7 +21,11 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
+
+      - name: Set version
+        run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}-KC${{ matrix.version }}
+
       - name: Publish package
-        run: mvn -Dproject.version=${{ github.event.release.tag_name }}-KC${{ matrix.version }} --batch-mode deploy
+        run: mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

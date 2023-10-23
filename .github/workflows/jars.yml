@@ -23,10 +23,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Set version
+        run: mvn versions:set -DnewVersion=${{ github.ref_name }}-KC${{ matrix.version }}
+
       - name: Build
         run: |
-            mvn -Dproject.version=${{ github.ref_name }}-KC${{ matrix.version }} \
-                -Dkeycloak.version=${{ matrix.version }} \
+            mvn -Dkeycloak.version=${{ matrix.version }} \
                 -B package --file pom.xml
 
       - name: "Create release"
