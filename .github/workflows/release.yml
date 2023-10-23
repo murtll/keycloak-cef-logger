@@ -1,13 +1,17 @@
 name: Publish package
 
 on:
-  push:
-    tags:
-        - '*'
+  release:
+    types:
+        - released
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version:
+          - 20.0.1  
     permissions:
       contents: read
       packages: write
@@ -18,6 +22,6 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: Publish package
-        run: mvn -Dproject.version=${{ github.ref_name }} --batch-mode deploy
+        run: mvn -Dproject.version=${{ github.event.release.tag_name }}-KC${{ matrix.version }} --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
