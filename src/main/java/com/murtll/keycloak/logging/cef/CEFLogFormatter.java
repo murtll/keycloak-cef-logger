@@ -35,10 +35,17 @@ public class CEFLogFormatter {
         int eventId = Integer.parseInt(e.getOperationType().getStableIndex() + "" + e.getResourceType().ordinal());
         String eventName = e.getOperationType() + "_" + e.getResourceType();
 
+        Map<String, String> details = new HashMap<>();
+        details.put("client_id", e.getAuthDetails().getClientId());
+        details.put("ip_address", e.getAuthDetails().getIpAddress());
+        details.put("realm_id", e.getAuthDetails().getRealmId());
+        details.put("user_id", e.getAuthDetails().getUserId());
+        details.put("resource_path", e.getResourcePath());
+
         return this.formatGeneric(eventId,
             eventName,
             this.getSeverity(eventId),
-            new HashMap<>());
+            details);
     }
 
     private String getSeverity(int index) {
